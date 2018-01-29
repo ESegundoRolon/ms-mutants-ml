@@ -30,14 +30,100 @@ $ mvn clean install
 $ docker run esegundorolon/ms-mutants-ml:latest -e <params> 
 ```
 
-*Los <params> posibles son:
-**SERVER_PORT : Puerto donde se ejecuta el servidor Tomcat, por defecto el 8090
-**MUTANT_MATCH_FACTOR: Cantidad de bases nitrogenadas consecutivas a encontrar, por defecto 4
-**MUTANT_SECUENCES_OCCURENCES: Cantidad de secuencias repetidas para ser considerado mutante, por defecto 2
-**MS_CONFIGURATION_DATEFORMAT: Formato de timestamp en la respuesta de error, por defecto yyyy-MM-dd'T'HH:mm:ss'Z'
+* Los <params> posibles son:
+    1. SERVER_PORT : Puerto donde se ejecuta el servidor Tomcat, por defecto el 8090
+    2.  MUTANT_MATCH_FACTOR: Cantidad de bases nitrogenadas consecutivas a encontrar, por defecto 4
+    3.  MUTANT_SECUENCES_OCCURENCES: Cantidad de secuencias repetidas para ser considerado mutante, por defecto 2
+    4.  MS_CONFIGURATION_DATEFORMAT: Formato de timestamp en la respuesta de error, por defecto yyyy-MM-dd'T'HH:mm:ss'Z'
 
-*Ejemplo: 
+* Ejemplo: 
 ```bash
 $ docker run esegundorolon/ms-mutants-ml:latest -e SERVER_PORT=1111 -e MUTANT_MATCH_FACTOR=5
 ```
 ## API DOC:
+
+**Detectar ADN Mutante**
+----
+  Devuelve el ADN mutante si aplica.
+
+* **URL**
+
+  /api/v1/mutant
+
+* **Method:**
+
+  `POST`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+    None
+
+* **Data Params**
+
+  **Required:**
+  dna: array de strings que conforman matriz cuadrada, los caracteres aceptados son CGTA
+  **Content:** `{ "dna":["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"] }`
+
+* **Success Response:**
+
+  * **Code:** 200 
+    **Content:** `{  "dna": [ "ATGCGA","CAGTGC","TTATGT","AGAAGG", "CCCCTA","TCACTG"],"isMutant": true }`
+ 
+* **Error Response:**
+
+  * **Code:** 403 FORBIDDEN >
+    **Content:** `{     "message": "Las secuencias de ADN ingresadas no corresponden a un mutante",     "timestamp": "2018-01-29T08:01:25Z",     "field": null }`
+
+  OR
+
+  * **Code:** 422 UNPROCESSABLE ENTITY <br />
+    **Content:** `{     "message": "Las secuencias de ADN enviadas contienen caracteres invalidos o no forman una matrix NxN",     "timestamp": "2018-01-29T08:01:28Z",     "field": null }`
+    
+  OR
+  
+  * **Code:** 400 BAD REQUEST <br />
+      **Content:** ` {     "message": "El body recibido es invalido, se espera un array de Strings",     "timestamp": "2018-01-29T08:01:30Z",     "field": "no puede ser null" }`
+
+**Obtener estadisticas**
+----
+  Devuelve estadisticas de adn analizado.
+
+* **URL**
+
+  /api/v1/stats
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+    None
+
+* **Data Params**
+
+  **Required:**
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 
+    **Content:** `{     "count_mutant_dna": 1,     "count_human_dna": 1,     "ratio": 0.5 }`
+
+## TEST:
+
+
+  * Importar los archivos del directorio ./collections/local.postman_environment.json y ./collections/prod.postman_environment.json
+
+
+   * Importar la collection de pruebas ./collections/mutant-detector.postman_collection.json
+    
+   * Elegir el environment, ya sea desarrollo : **127.0.0.1:8090** o produccion: **35.198.40.169**
+
+
+
+

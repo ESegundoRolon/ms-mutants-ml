@@ -1,0 +1,168 @@
+{
+	"id": "2442c204-bc76-51ff-0334-747ddd08fe21",
+	"name": "mutant-detector",
+	"description": "",
+	"order": [
+		"3059a6da-ca64-2190-f049-fcaddc50ae33",
+		"445dbb01-c987-d5f3-3705-302a82b12ed1",
+		"3347ea0a-5fd6-1dac-102a-eaefd756f169",
+		"6434df95-ae23-5e7e-5eb0-ab7a664d8bd8",
+		"ebc6197b-522f-c33b-5f5c-ef20d70caedf"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1517211266199,
+	"owner": 0,
+	"public": false,
+	"requests": [
+		{
+			"id": "3059a6da-ca64-2190-f049-fcaddc50ae33",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/api/v1/stats",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"tests": "\ntests[\"Respeta mensajeria\"] = responseBody.has(\"count_mutant_dna\") &&responseBody.has(\"count_human_dna\") &&  responseBody.has(\"ratio\");\n\n\n\ntests[\"HTTP Code de respuesta es 200\"] = responseCode.code === 200;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1517212828673,
+			"name": "Get Stats",
+			"description": "",
+			"collectionId": "2442c204-bc76-51ff-0334-747ddd08fe21",
+			"responses": [],
+			"rawModeData": "{\r\n\"dna\":[\"ATGCGA\",\"CAGTGC\",\"TTATGT\",\"AGAAGG\",\"CCCCTA\",\"TCACTG\"]\r\n}"
+		},
+		{
+			"id": "3347ea0a-5fd6-1dac-102a-eaefd756f169",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/api/v1/mutant",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "\ntests[\"Respeta mensajeria\"] = responseBody.has(\"message\") &&responseBody.has(\"timestamp\") &&  responseBody.has(\"field\");\n\n\n\ntests[\"HTTP Code de respuesta es 403\"] = responseCode.code === 403;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1517212837740,
+			"name": "POST human",
+			"description": "Valid hu DNA",
+			"collectionId": "2442c204-bc76-51ff-0334-747ddd08fe21",
+			"responses": [],
+			"rawModeData": "{\r\n\t\"dna\":[\"ATGCGA\", \"CAGTGC\", \"TTATTT\", \"AGACGG\", \"GCGTCA\", \"TCACTG\"]\r\n}"
+		},
+		{
+			"id": "445dbb01-c987-d5f3-3705-302a82b12ed1",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/api/v1/mutant",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "\ntests[\"Respeta mensajeria\"] = responseBody.has(\"dna\") &&responseBody.has(\"isMutant\");\n\ntests[\"HTTP Code de respuesta es 200\"] = responseCode.code == 200;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar size=0;\nfor (var count in jsonData.dna) {\n    if(jsonData.dna.hasOwnProperty(count))\n        size += 1;\n}\n\ntests[\"El DNA devuelto no esta vacio\"] = size > 0;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1517212832116,
+			"name": "POST mutant ",
+			"description": "Valid mutant DNA",
+			"collectionId": "2442c204-bc76-51ff-0334-747ddd08fe21",
+			"responses": [],
+			"rawModeData": "{\r\n\"dna\":[\"ATGCGA\",\"CAGTGC\",\"TTATGT\",\"AGAAGG\",\"CCCCTA\",\"TCACTG\"]\r\n}"
+		},
+		{
+			"id": "6434df95-ae23-5e7e-5eb0-ab7a664d8bd8",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/api/v1/mutant",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "\ntests[\"Respeta mensajeria\"] = responseBody.has(\"message\") &&responseBody.has(\"timestamp\") &&  responseBody.has(\"field\");\n\ntests[\"HTTP Code de respuesta es 422\"] = responseCode.code == 422;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1517212842025,
+			"name": "POST invalid",
+			"description": "Invalid DNA\n",
+			"collectionId": "2442c204-bc76-51ff-0334-747ddd08fe21",
+			"responses": [],
+			"rawModeData": "{\r\n\t\"dna\":[\"ATG1GA\", \"CAGTGC\", \"TTATT\", \"AGACGG\", \"GCGZCA\", \"TCACTG\"]\r\n}"
+		},
+		{
+			"id": "ebc6197b-522f-c33b-5f5c-ef20d70caedf",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/api/v1/mutant",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "\ntests[\"Respeta mensajeria\"] = responseBody.has(\"message\") &&responseBody.has(\"timestamp\") &&  responseBody.has(\"field\");\n\ntests[\"HTTP Code de respuesta es 400\"] = responseCode.code == 400;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1517212846093,
+			"name": "POST Bad Request",
+			"description": "Bad request\n",
+			"collectionId": "2442c204-bc76-51ff-0334-747ddd08fe21",
+			"responses": [],
+			"rawModeData": "{\r\n\t\"dnAa\":[]\r\n}"
+		}
+	]
+}
