@@ -18,22 +18,23 @@ $ cd ms-mutants-ml
 
 ### 2- Construir imagen de Docker:
 
-* Utilizar docker-cli sobre el path ms-mutants-ml anterior o el build puede arrojar error
+* Si no se tiene JDK 1.8 se puede utilizar *docker-cli* para contruir una imágen de la aplicación. Ejecutar el siguiente comando sobre el path ms-mutants-ml anterior.
 
 ```bash
 $ mvn clean install
 ```
-* Se puede correr la aplicacion sin docker:
+### 3- Ejecutar aplicacion ():
+
+*  Si se tiene jdk 1.8 se puede ejecutar la aplicación sin docker:
 ```bash
 $ mvn spring-boot:run
 ```
-### 3- Ejecutar aplicacion:
-
+* También se puede correr la imágen de docker:
 ```bash
 $ docker run esegundorolon/ms-mutants-ml:latest -e <params> 
 ```
 
-* Los <params> posibles son:
+* Los parámetros posibles son:
     1. SERVER_PORT : Puerto donde se ejecuta el servidor Tomcat, por defecto el 8090
     2.  MUTANT_MATCH_FACTOR: Cantidad de bases nitrogenadas consecutivas a encontrar, por defecto 4
     3.  MUTANT_SECUENCES_OCCURENCES: Cantidad de secuencias repetidas para ser considerado mutante, por defecto 2
