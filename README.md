@@ -23,7 +23,7 @@ $ cd ms-mutants-ml
 ```bash
 $ mvn clean install
 ```
-### 3- Ejecutar aplicacion ():
+### 3- Ejecutar aplicación:
 
 *  Si se tiene jdk 1.8 se puede ejecutar la aplicación sin docker:
 ```bash
