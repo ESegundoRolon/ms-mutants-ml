@@ -2,14 +2,7 @@ package org.github.erolon.model.enums;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import org.github.erolon.model.Matrix;
 
 public enum DNANitrogenBases {
 	//TO DO : sacar bases nitrogenadas de tabla Paramaters

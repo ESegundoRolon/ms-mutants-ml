@@ -18,6 +18,12 @@ public class StatsServiceImpl implements IStatsService{
 	@Autowired
 	private IDNASequenceRepository dnaSequenceRepository;
 	
+	/**
+	 * Servicio para obtener la cantidad de secuencias guardadas
+	 * Obtiene todos los documentos filtrando por el flag isMutant,
+	 * luego obtiene todos los documentos y de la resta se obtiene 
+	 * las secuencias de ADN humanas, y el ratio
+	 */
 	public StatsResponse getStats(){
 		int nbMutandDNA = dnaSequenceRepository.getNumberOfAllMutantDNASequences();
 		int nbAllDNA = dnaSequenceRepository.getNumberOfAllDNASequences();
@@ -35,6 +41,10 @@ public class StatsServiceImpl implements IStatsService{
 		return new StatsResponse( nbMutandDNA , nbHumanDNA , ratio );
 	}
 	
+	/**
+	 * Servicio para guardar el objeto DNASequence con las secuencias de ADN y el flag si es
+	 * mutante
+	 */
 	public void saveDNASequence (DNASequence dnaSequence){
 		dnaSequenceRepository.save(dnaSequence);
 	}

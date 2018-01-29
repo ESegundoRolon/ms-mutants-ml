@@ -1,20 +1,14 @@
 package org.github.erolon.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.github.erolon.model.enums.DNANitrogenBases;
 
 public class StringUtils {
-
+	
 	public static boolean stringContainsNumbers(String value){
 		return Pattern.compile("(.)*(\\d)(.)*", Pattern.CASE_INSENSITIVE).matcher(value).matches();
 	}
@@ -38,7 +32,6 @@ public class StringUtils {
 	 * @return boolean
 	 */
 	public static int getRepetitionsInStringWithCriteria ( String stringToSearch , String charactersToFind , int nbConsecutiveCount , int nbOcurrences ){
-
 		//Creamos hashmap para guardar las ocurrencias de cada caracter a buscar
 		Map<String, Integer> occurencesOfMatches = new HashMap<>();
 		int j = 0;

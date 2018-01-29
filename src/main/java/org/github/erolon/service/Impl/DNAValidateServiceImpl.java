@@ -7,13 +7,11 @@ import java.util.stream.Collectors;
 import org.github.erolon.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.github.erolon.controllers.MutantController;
 import org.github.erolon.exceptions.InvalidDNASequenceException;
 import org.github.erolon.model.DNASequence;
 import org.github.erolon.model.enums.DNANitrogenBases;
 import org.github.erolon.service.IDNAValidateService;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,13 +20,6 @@ public class DNAValidateServiceImpl implements IDNAValidateService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DNAValidateServiceImpl.class);
 	
-	/**
-	 * Metodo para validar si la secuencia de ADN recibida:
-	 * No es Numerica
-	 * No contiene bases nitrogenadas invalidas
-	 * Forman una tabla de NxN
-	 * Caso contrario devuelve InvalidDNASequenceException
-	 */
 	public void isValidOrThrowException(DNASequence dnaSequence) {
 		
 		try {
@@ -54,12 +45,23 @@ public class DNAValidateServiceImpl implements IDNAValidateService {
 		LOGGER.info("Las secuencias son correcta");
 	}
 	
+	/**
+	 * Filtra el array recibido, segun la presencia de caracteres numericos
+	 * devuelve los string numericos encontrados
+	 * @param dna
+	 * @return
+	 */
 	private List<String> getNumericDNASequences(String[] dna){		
 				return Arrays.asList(dna).stream()
 				.filter( row -> StringUtils.stringContainsNumbers(row) )
 				.collect(Collectors.toList());
 	}
 	
+	/**
+	 * Verifica que si se arma una matriz con el array recibido, esta sea cuadrada
+	 * @param dna
+	 * @return
+	 */
 	private boolean isSquareDNASequences(String[] dna){	
 		 if(dna ==  null || dna.length == 0)
 			 return false;

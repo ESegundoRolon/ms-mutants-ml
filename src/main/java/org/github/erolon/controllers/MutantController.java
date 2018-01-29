@@ -10,7 +10,6 @@ import org.github.erolon.model.DNASequence;
 import org.github.erolon.service.IDNAValidateService;
 import org.github.erolon.service.IMutantDetectorService;
 import org.github.erolon.service.IStatsService;
-import org.github.erolon.service.Impl.MutantDetectorServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class MutantController {

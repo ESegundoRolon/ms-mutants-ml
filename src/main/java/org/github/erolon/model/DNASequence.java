@@ -1,17 +1,12 @@
 package org.github.erolon.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import org.github.erolon.dto.DNASequenceRequest;
 import org.github.erolon.model.enums.DNANitrogenBases;
 import org.github.erolon.utils.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DNASequence {
@@ -76,16 +71,21 @@ public class DNASequence {
 		List<String> verticallyRepeatedNitrogenBases = Arrays
 		        .stream(data)
 		        .map(String::valueOf)
-		        .filter(row -> getNbConsecutiveNitrogenBases( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition ,numberOfSequencesOccurence) >=1)
+		        .filter(row -> getNbConsecutiveNitrogenBases( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition , numberOfSequencesOccurence) >=1)
 		        .collect(Collectors.toList());
 		return verticallyRepeatedNitrogenBases.size();
 	}
 	
 	public int repeatedNitrogenBasesObliquely ( int numberOfNitrogenBasesRepetition , int numberOfSequencesOccurence ){
+		
 		Matrix matrix = new Matrix(StringUtils.transformStringArrayToCharArray(dna));
-//		if(getNumberOfOccurencesOfNitrogenBases( matrix.getMainDiagonal() , dnaNitrogenBases , numberOfNitrogenBasesRepetition ,numberOfSequencesOccurence) == numberOfSequencesOccurence)
-//			return numberOfSequencesOccurence;
-		return 0;
+		int repeatedNitrogenBasesInMainDiagonal = getNbConsecutiveNitrogenBases( matrix.getMainDiagonal() , dnaNitrogenBases , numberOfNitrogenBasesRepetition , numberOfSequencesOccurence);
+		if( repeatedNitrogenBasesInMainDiagonal >= numberOfSequencesOccurence)
+			return repeatedNitrogenBasesInMainDiagonal;
+		List<String> repeatedNitrogenBasesInDiagonals = Arrays.asList(matrix.getDiagonals()).stream()
+				.filter( row -> getNbConsecutiveNitrogenBases( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition , numberOfSequencesOccurence) >=1)
+				.collect(Collectors.toList());
+		return repeatedNitrogenBasesInMainDiagonal + repeatedNitrogenBasesInDiagonals.size();
 	}
 	
 	private int getNbConsecutiveNitrogenBases(String dnaSequence , String nitrogenBases, int numberOfNitrogenBasesRepetitions, int numberOfSequencesRepetitions){
