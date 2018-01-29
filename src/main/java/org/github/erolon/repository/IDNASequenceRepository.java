@@ -2,11 +2,13 @@ package org.github.erolon.repository;
 
 import org.github.erolon.model.DNASequence;
 
-public interface IDNASequenceRepository {
+
+public interface IDNASequenceRepository  {
 	
-	public void saveDNASequence(DNASequence dnaSequence);
+	public int getNumberOfAllDNASequences();
 	
-	public int countAllDNASequences();
+	public int getNumberOfAllMutantDNASequences();
 	
-	public int countAllMutantDNASequences();
+	public void save(DNASequence sequence);
+	
 }
