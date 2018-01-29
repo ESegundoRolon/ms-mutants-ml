@@ -23,7 +23,10 @@ $ cd ms-mutants-ml
 ```bash
 $ mvn clean install
 ```
-
+* Se puede correr la aplicacion sin docker:
+```bash
+$ mvn spring-boot:run
+```
 ### 3- Ejecutar aplicacion:
 
 ```bash
@@ -118,11 +121,12 @@ $ docker run esegundorolon/ms-mutants-ml:latest -e SERVER_PORT=1111 -e MUTANT_MA
 
 
   * Importar los archivos del directorio ./collections/local.postman_environment.json y ./collections/prod.postman_environment.json
-
-
+![import_environment](https://user-images.githubusercontent.com/29233071/35500785-66c16cee-04b6-11e8-92cc-57be0e8c79a3.png)
    * Importar la collection de pruebas ./collections/mutant-detector.postman_collection.json
-    
+![import_collection](https://user-images.githubusercontent.com/29233071/35500824-878a3e1a-04b6-11e8-8308-d5798e2ef44b.png)
    * Elegir el environment, ya sea desarrollo : **127.0.0.1:8090** o produccion: **35.198.40.169**
+![select_enviroment](https://user-images.githubusercontent.com/29233071/35500870-be20b544-04b6-11e8-8887-d15e8dffe09e.png)
+
 
 
 
