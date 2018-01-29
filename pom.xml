@@ -4,7 +4,7 @@
   <groupId>org.github.erolon</groupId>
   <artifactId>ms-mutants-ml</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.3-SNAPSHOT</version>
   <name>ms-mutants-ml</name>
   <description>ML-Challenge</description>
 
@@ -15,7 +15,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <appengine.maven.plugin>1.3.2</appengine.maven.plugin>
     <appengine.sdk.version>1.9.60</appengine.sdk.version>
-
+	<docker.image.prefix>esegundorolon</docker.image.prefix>
+     <!-- Name of Docker image that will be built. -->
+     <docker.image.name>ms-mutants-ml</docker.image.name>
+     <docker.image.src.root>src/main/resources/docker</docker.image.src.root>
+     <docker.build.directory>${project.build.directory}/docker</docker.build.directory>         
   </properties>
 
   <dependencies>
@@ -56,19 +60,114 @@
           </execution>
         </executions>
       </plugin>
-<!-- START plugin -->
-      <plugin>
-        <groupId>com.google.cloud.tools</groupId>
-    	<artifactId>appengine-maven-plugin</artifactId>
-    	<version>1.3.1</version>
-    	<configuration>
-	    <project>ml-challenge-mutants</project>
-            <version>1</version>
-       		<devserver.host>localhost</devserver.host>
-       		<devserver.port>8888</devserver.port>
-        </configuration>
-	</plugin>
-<!-- END plugin -->
+		<plugin>
+		      <artifactId>maven-resources-plugin</artifactId>
+		      <executions>
+		          <execution>
+		              <id>copy-resources</id>
+		              <phase>package</phase>
+		              <goals>
+		                  <goal>copy-resources</goal>
+		              </goals>
+		              <configuration>
+		                  <outputDirectory>${docker.build.directory}</outputDirectory>
+		                  <resources>
+		                      <resource>
+		                          <directory>${docker.image.src.root}</directory>
+		                          <filtering>false</filtering>
+		                      </resource>
+		                  </resources>
+		              </configuration>
+		          </execution>
+		      </executions>
+		  </plugin>
+
+	 <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <executions>
+          <execution>
+              <id>copy</id>
+              <phase>package</phase>
+              <goals>
+                  <goal>copy</goal>
+              </goals>
+              <configuration>
+                  <artifactItems>
+                      <artifactItem>
+                          <groupId>${project.groupId}</groupId>
+                          <artifactId>${project.artifactId}</artifactId>
+                          <version>${project.version}</version>
+                          <type>jar</type>
+                          <overWrite>true</overWrite>
+                          <outputDirectory>${docker.build.directory}</outputDirectory>
+                          <destFileName>${project.build.finalName}.jar</destFileName>
+                      </artifactItem>
+
+                  </artifactItems>
+                  <outputDirectory>${docker.build.directory}-${project.version}.jar</outputDirectory>
+                  <overWriteReleases>true</overWriteReleases>
+                  <overWriteSnapshots>true</overWriteSnapshots>
+              </configuration>
+          </execution>
+      </executions>
+  </plugin>
+  <plugin>
+    <groupId>com.spotify</groupId>
+    <artifactId>docker-maven-plugin</artifactId>
+    <version>0.4.13</version>
+    <executions>
+        <execution>
+            <id>remove-image</id>
+            <phase>clean</phase>
+            <goals>
+                <goal>removeImage</goal>
+            </goals>
+            <configuration>
+                <imageName>${docker.image.name}</imageName>
+                <imageTags>
+                    <imageTag>${project.version}</imageTag>
+                </imageTags>
+                <verbose>true</verbose>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+	 <plugin>
+         <groupId>com.spotify</groupId>
+         <artifactId>dockerfile-maven-plugin</artifactId>
+         <version>1.2.2</version>
+         <executions>
+             <execution>
+                 <id>default</id>
+                 <phase>package</phase>
+                 <goals>
+                     <goal>build</goal>
+                 </goals>
+             </execution>
+         </executions>
+         <configuration>
+             <contextDirectory>${project.build.directory}/docker</contextDirectory>
+             <buildArgs>
+		     	<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+		     	<outputDirectory>${docker.build.directory}</outputDirectory>
+		     </buildArgs>
+             <writeTestMetadata>false</writeTestMetadata>
+             <dockerInfoDirectory></dockerInfoDirectory>
+             <verbose>true</verbose>
+             <forceCreation>true</forceCreation>
+             <imageName>${docker.image.name}</imageName>
+             <repository>${docker.image.name}</repository>
+             <tag>${project.version}</tag>
+             <forceTags>true</forceTags>
+             <pullNewerImage>false</pullNewerImage>
+             <imageTags>
+                 <imageTag>${project.version}</imageTag>
+             </imageTags>
+             <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
+         </configuration>
+     </plugin>
+	
     </plugins>
 </build>
 </project>
