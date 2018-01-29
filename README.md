@@ -29,7 +29,7 @@ $ mvn clean install
 ```bash
 $ mvn spring-boot:run
 ```
-* También se puede correr la imágen de docker:
+* O se puede correr la imágen de docker:
 ```bash
 $ docker run esegundorolon/ms-mutants-ml:latest -e <params> 
 ```
