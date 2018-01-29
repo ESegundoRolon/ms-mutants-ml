@@ -19,18 +19,6 @@ public class Matrix {
 	}
 	
 	public char[][] getData() { return data; }
-	
-//	public static Matrix buildNegativeIdentityMatrix(int size){
-//		Matrix matrix = new Matrix(size, size);
-//		IntStream.range(0,size).forEach( i -> matrix.data[i][i] = -1);
-//		return matrix;
-//	}
-	
-//	public void transpose(){
-//		System.out.print("==================="+data.length);
-//		IntStream.range(0, data.length).forEach(row ->
-//				IntStream.range(0, data.length).forEach( column -> data[row][column] = data[data.length -1 - column][row]));
-//	}
 
 	public Matrix rotate() {
 		char[][] returnedData = new char[data.length][data.length];
@@ -38,4 +26,17 @@ public class Matrix {
 		IntStream.range(0, data.length).forEach( column -> returnedData[row][column] = data[data.length -1 - column][row]));
 		return new Matrix(returnedData);
 	}
+	
+	public String getMainDiagonal( )
+    {
+		StringBuilder diagonal = new StringBuilder();
+        for (int row = 0; row < data.length -1; row++)
+        {
+            for (int col = 0; col < data[row].length -1; col++)
+            {
+            	diagonal.append(String.valueOf(data[row][row]));
+            }
+        }
+        return diagonal.toString();
+    }
 }

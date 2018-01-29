@@ -12,9 +12,12 @@ import org.github.erolon.dto.DNASequenceRequest;
 import org.github.erolon.model.enums.DNANitrogenBases;
 import org.github.erolon.utils.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class DNASequence {
 
 	private String[] dna;
+	@JsonIgnore
 	private String dnaNitrogenBases;
 	private boolean isMutant;
 
@@ -39,10 +42,6 @@ public class DNASequence {
 		return dna;
 	}
 	
-	public List<String> getDNAAsList() {	
-		return Arrays.stream(dna).collect(Collectors.toList());
-	}
-	
 	public void setDNA(String[] dna) {
 		this.dna = dna;
 	}
@@ -58,41 +57,38 @@ public class DNASequence {
 	public void setIsMutant(boolean value){
 		this.isMutant = value;
 	}
+	
 	public boolean getIsMutant(){
 		return isMutant;
 	}
-	public int repeatedRowWithNitrogenBasesHorizontally ( int numberOfNitrogenBasesRepetition , int numberOfSequencesOccurence){
+	
+	public int repeatedNitrogenBasesHorizontally ( int numberOfNitrogenBasesRepetition , int numberOfSequencesOccurence){
 		 List<String> horizontallyRepeatedNitrogenBases = Arrays.asList(dna).stream()
-				.filter( row -> getNumberOfOccurencesOfNitrogenBases ( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition , numberOfSequencesOccurence) >=1 )
+				.filter( row -> getNbConsecutiveNitrogenBases ( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition , numberOfSequencesOccurence) >=1 )
 				.collect(Collectors.toList());
 		 return horizontallyRepeatedNitrogenBases.size();
 	}
 	
-	public int repeatedColumnsWithNitrogenBasesVertically ( int numberOfNitrogenBasesRepetition , int numberOfSequencesOccurence ){
+	public int repeatedNitrogenBasesVertically ( int numberOfNitrogenBasesRepetition , int numberOfSequencesOccurence ){
 		Matrix matrix = new Matrix(StringUtils.transformStringArrayToCharArray(dna));
 		Matrix rotaedMatrix = matrix.rotate();	
 		char[][] data = rotaedMatrix.getData();
 		List<String> verticallyRepeatedNitrogenBases = Arrays
 		        .stream(data)
 		        .map(String::valueOf)
-		        .filter(row -> getNumberOfOccurencesOfNitrogenBases( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition ,numberOfSequencesOccurence) >=1)
+		        .filter(row -> getNbConsecutiveNitrogenBases( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition ,numberOfSequencesOccurence) >=1)
 		        .collect(Collectors.toList());
 		return verticallyRepeatedNitrogenBases.size();
 	}
 	
-	public int repeatedColumnsWithNitrogenBasesObliquely ( int numberOfNitrogenBasesRepetition , int numberOfSequencesOccurence ){
+	public int repeatedNitrogenBasesObliquely ( int numberOfNitrogenBasesRepetition , int numberOfSequencesOccurence ){
 		Matrix matrix = new Matrix(StringUtils.transformStringArrayToCharArray(dna));
-		Matrix rotaedMatrix = matrix.rotate();	
-		char[][] data = rotaedMatrix.getData();
-		List<String> verticallyRepeatedNitrogenBases = Arrays
-		        .stream(data)
-		        .map(String::valueOf)
-		        .filter(row -> getNumberOfOccurencesOfNitrogenBases( row , dnaNitrogenBases , numberOfNitrogenBasesRepetition , numberOfSequencesOccurence ) >=1)
-		        .collect(Collectors.toList());
-		return verticallyRepeatedNitrogenBases.size();
+//		if(getNumberOfOccurencesOfNitrogenBases( matrix.getMainDiagonal() , dnaNitrogenBases , numberOfNitrogenBasesRepetition ,numberOfSequencesOccurence) == numberOfSequencesOccurence)
+//			return numberOfSequencesOccurence;
+		return 0;
 	}
 	
-	private int getNumberOfOccurencesOfNitrogenBases(String dnaSequence , String nitrogenBases, int numberOfNitrogenBasesRepetitions, int numberOfSequencesRepetitions){
-		return StringUtils.getNumberOfRepeatedCharacters( dnaSequence , nitrogenBases , numberOfNitrogenBasesRepetitions , numberOfSequencesRepetitions );
+	private int getNbConsecutiveNitrogenBases(String dnaSequence , String nitrogenBases, int numberOfNitrogenBasesRepetitions, int numberOfSequencesRepetitions){
+		return StringUtils.getRepetitionsInStringWithCriteria( dnaSequence , nitrogenBases , numberOfNitrogenBasesRepetitions , numberOfSequencesRepetitions );
 	}
 }

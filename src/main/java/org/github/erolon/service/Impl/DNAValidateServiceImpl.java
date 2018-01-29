@@ -5,15 +5,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.github.erolon.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.github.erolon.controllers.MutantController;
 import org.github.erolon.exceptions.InvalidDNASequenceException;
 import org.github.erolon.model.DNASequence;
 import org.github.erolon.model.enums.DNANitrogenBases;
 import org.github.erolon.service.IDNAValidateService;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Service
 public class DNAValidateServiceImpl implements IDNAValidateService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DNAValidateServiceImpl.class);
+	
 	/**
 	 * Metodo para validar si la secuencia de ADN recibida:
 	 * No es Numerica
@@ -22,6 +30,12 @@ public class DNAValidateServiceImpl implements IDNAValidateService {
 	 * Caso contrario devuelve InvalidDNASequenceException
 	 */
 	public void isValidOrThrowException(DNASequence dnaSequence) {
+		
+		try {
+			LOGGER.info("Validando : " + new ObjectMapper().writeValueAsString(dnaSequence));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		
 		String[] dna = dnaSequence.getDNA();
 		
@@ -37,7 +51,7 @@ public class DNAValidateServiceImpl implements IDNAValidateService {
 		if(unknownDNASequences.size()>0 || !isSquareDNASequences(dna))
 			throw new InvalidDNASequenceException();
 		
-		
+		LOGGER.info("Las secuencias son correcta");
 	}
 	
 	private List<String> getNumericDNASequences(String[] dna){		

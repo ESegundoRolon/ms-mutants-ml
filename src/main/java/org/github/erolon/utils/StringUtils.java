@@ -20,37 +20,40 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Se itera sobre cada character del string @stringToAnalyze , buscando las letras del @targetToFind
-	 * Para cada letra del @targetToFind se guarda en un mapa las ocurrencias, al finalizar el iterado se verifica
-	 * cuantos characters de @targetToFind son al menos el criterio @nbConsecutiveCount
+	 * Devuelve el numero de veces que en el string stringToSearch existen nbOcurrences 
+	 * veces las repeticiones de algun caracter del string charactersToFind,
+	 * nbConsecutiveCount veces consecutivas
 	 * 
-	 * Devuelve la cantidad de veces que alguna de las letras de @targetToFind, se encontro en @stringToAnalyze
-	 * 
-	 * Si se recibe por ejemplo AAAAAAAA se toma como 2 sequencias de 4
-	 * 
+	 *  <p>Ejemplo: 
+	 *  stringToSearch = ATGCCCCTTTT nbOcurrences = 2
+	 *  nbConsecutiveCount = 4 charactersToFind = ATGC
+	 *  
+	 *  Devuelve 2 ya que en ATGCCCCTTTT existen 2 veces las repeticiones 
+	 *  de algun caracter del string ATGC, 4 veces consecutivas
+	 *  
 	 * @param stringToAnalyze
-	 * @param targetToFind
+	 * @param charactersToFind
 	 * @param nbConsecutiveCount
 	 * @param nbOcurrences
-	 * @return int
+	 * @return boolean
 	 */
-	public static int getNumberOfRepeatedCharacters (String stringToAnalyze,String targetToFind, int nbConsecutiveCount, int nbOcurrences){
+	public static int getRepetitionsInStringWithCriteria ( String stringToSearch , String charactersToFind , int nbConsecutiveCount , int nbOcurrences ){
 
 		//Creamos hashmap para guardar las ocurrencias de cada caracter a buscar
 		Map<String, Integer> occurencesOfMatches = new HashMap<>();
 		int j = 0;
 		int nbOfRepeatedSequences = 0;
 		//Iteramos sobre cada caracter a buscar en el string a analizar
-		while( j < targetToFind.length() &&  nbOfRepeatedSequences < nbOcurrences) {		
+		while( j < charactersToFind.length() &&  nbOfRepeatedSequences < nbOcurrences) {		
 			int iterator = 1;
 			int characterCount = 1;
 			//Mientras siga iterando y tenga nbConsecutiveCount consecutivos continua el bucle
-			while (iterator < stringToAnalyze.length() && characterCount<nbConsecutiveCount) {
-				if (stringToAnalyze.charAt(iterator-1)==stringToAnalyze.charAt(iterator)) characterCount++;
+			while (iterator < stringToSearch.length() && characterCount < nbConsecutiveCount) {
+				if (stringToSearch.charAt(iterator-1)==stringToSearch.charAt(iterator)) characterCount++;
 				else characterCount=1;
 				iterator++;
 			}
-			String characterString = String.valueOf(targetToFind.charAt(j));
+			String characterString = String.valueOf(charactersToFind.charAt(j));
 			if(characterCount == nbConsecutiveCount ){
 				//en el map guardo la cantidad de veces que el caracter a machear, se repite en multiplo de nbConsecutiveCount
 				//ya que en en stringToAnalyze se puede repetir N veces
