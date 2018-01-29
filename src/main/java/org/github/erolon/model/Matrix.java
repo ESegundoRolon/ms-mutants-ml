@@ -28,7 +28,7 @@ public class Matrix {
 	 */
 	public Matrix rotate() {
 		char[][] returnedData = new char[data.length][data.length];
-		LOGGER.debug("Antes de rotar: {}",Arrays.deepToString(returnedData));
+		LOGGER.debug("Antes de rotar: {}",Arrays.deepToString(data));
 		IntStream.range(0, data.length).forEach(row ->
 		IntStream.range(0, data.length).forEach( column -> returnedData[row][column] = data[data.length -1 - column][row]));
 		LOGGER.debug("Luego de rotar: {}",Arrays.deepToString(returnedData));
@@ -71,7 +71,6 @@ public class Matrix {
 	    //el primero y el anteultimo son los vertices superior izquierdo e inferior derecho
 	    diagonals.remove(0);
 	    diagonals.remove(diagonals.size()-1);
-	    LOGGER.debug("Diagonales TAMANO: {}", diagonals.toArray(new String[0]).length );
 	    return diagonals.toArray(new String[0]);
 	}
 }

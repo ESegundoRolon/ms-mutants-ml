@@ -19,7 +19,7 @@
      <!-- Name of Docker image that will be built. -->
      <docker.image.name>ms-mutants-ml</docker.image.name>
      <docker.image.src.root>src/main/resources/docker</docker.image.src.root>
-     <docker.build.directory>${project.build.directory}/docker</docker.build.directory>         
+     <docker.build.directory>${project.build.directory}</docker.build.directory>         
   </properties>
 
   <dependencies>
@@ -35,16 +35,12 @@
       <version>1.5.9.RELEASE</version>
       <scope>test</scope>
     </dependency>
-<dependency>
-
-    <groupId>org.dizitart</groupId>
-
-    <artifactId>nitrite</artifactId>
-
-    <version>1.0</version>
-    </dependency>
-
-  </dependencies>
+	<dependency>
+	    <groupId>org.dizitart</groupId>
+	    <artifactId>nitrite</artifactId>
+	    <version>1.0</version>
+	    </dependency>
+  	</dependencies>
 
   <build>
     <plugins>
@@ -60,113 +56,159 @@
           </execution>
         </executions>
       </plugin>
-		<plugin>
-		      <artifactId>maven-resources-plugin</artifactId>
-		      <executions>
-		          <execution>
-		              <id>copy-resources</id>
-		              <phase>package</phase>
-		              <goals>
-		                  <goal>copy-resources</goal>
-		              </goals>
-		              <configuration>
-		                  <outputDirectory>${docker.build.directory}</outputDirectory>
-		                  <resources>
-		                      <resource>
-		                          <directory>${docker.image.src.root}</directory>
-		                          <filtering>false</filtering>
-		                      </resource>
-		                  </resources>
-		              </configuration>
-		          </execution>
-		      </executions>
-		  </plugin>
 
-	 <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-dependency-plugin</artifactId>
-      <executions>
-          <execution>
-              <id>copy</id>
-              <phase>package</phase>
-              <goals>
-                  <goal>copy</goal>
-              </goals>
-              <configuration>
-                  <artifactItems>
-                      <artifactItem>
-                          <groupId>${project.groupId}</groupId>
-                          <artifactId>${project.artifactId}</artifactId>
-                          <version>${project.version}</version>
-                          <type>jar</type>
-                          <overWrite>true</overWrite>
-                          <outputDirectory>${docker.build.directory}</outputDirectory>
-                          <destFileName>${project.build.finalName}.jar</destFileName>
-                      </artifactItem>
+<!--     <plugin> -->
+<!--     <artifactId>maven-resources-plugin</artifactId> -->
+<!--     <executions> -->
+<!--         <execution> -->
+<!--             <id>copy-resources</id> -->
+<!--             <phase>validate</phase> -->
+<!--             <goals> -->
+<!--                 <goal>copy-resources</goal> -->
+<!--             </goals> -->
+<!--             <configuration> -->
+<!--                 <outputDirectory>${basedir}/target</outputDirectory> -->
+<!--                 <resources> -->
+<!--                     <resource> -->
+<!--                         <directory>${docker.image.src.root}</directory> -->
+<!--                         <filtering>true</filtering> -->
+<!--                     </resource> -->
+<!--                 </resources> -->
+<!--             </configuration> -->
+<!--         </execution> -->
+<!--     </executions> -->
+<!-- </plugin> -->
 
-                  </artifactItems>
-                  <outputDirectory>${docker.build.directory}-${project.version}.jar</outputDirectory>
-                  <overWriteReleases>true</overWriteReleases>
-                  <overWriteSnapshots>true</overWriteSnapshots>
-              </configuration>
-          </execution>
-      </executions>
-  </plugin>
-  <plugin>
-    <groupId>com.spotify</groupId>
-    <artifactId>docker-maven-plugin</artifactId>
-    <version>0.4.13</version>
-    <executions>
-        <execution>
-            <id>remove-image</id>
-            <phase>clean</phase>
-            <goals>
-                <goal>removeImage</goal>
-            </goals>
+        <plugin>
+        <executions>
+			<execution>
+				<id>default</id>
+				<phase>install</phase>
+				<goals>
+					<goal>build</goal>
+					<goal>push</goal>
+				</goals>
+			</execution>
+		</executions>
+            <groupId>com.spotify</groupId>
+            <artifactId>dockerfile-maven-plugin</artifactId>
+            <version>1.3.6</version>
             <configuration>
-                <imageName>${docker.image.name}</imageName>
-                <imageTags>
-                    <imageTag>${project.version}</imageTag>
-                </imageTags>
-                <verbose>true</verbose>
+            <repository>${docker.image.prefix}/${project.artifactId}</repository>
+			<buildArgs>
+				<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+			</buildArgs>
             </configuration>
-        </execution>
-    </executions>
-</plugin>
-	 <plugin>
-         <groupId>com.spotify</groupId>
-         <artifactId>dockerfile-maven-plugin</artifactId>
-         <version>1.2.2</version>
-         <executions>
-             <execution>
-                 <id>default</id>
-                 <phase>package</phase>
-                 <goals>
-                     <goal>build</goal>
-                 </goals>
-             </execution>
-         </executions>
-         <configuration>
-             <contextDirectory>${project.build.directory}/docker</contextDirectory>
-             <buildArgs>
-		     	<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-		     	<outputDirectory>${docker.build.directory}</outputDirectory>
-		     </buildArgs>
-             <writeTestMetadata>false</writeTestMetadata>
-             <dockerInfoDirectory></dockerInfoDirectory>
-             <verbose>true</verbose>
-             <forceCreation>true</forceCreation>
-             <imageName>${docker.image.name}</imageName>
-             <repository>${docker.image.name}</repository>
-             <tag>${project.version}</tag>
-             <forceTags>true</forceTags>
-             <pullNewerImage>false</pullNewerImage>
-             <imageTags>
-                 <imageTag>${project.version}</imageTag>
-             </imageTags>
-             <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
-         </configuration>
-     </plugin>
+        </plugin>
+
+ 
+<!-- 		<plugin> -->
+<!-- 		      <artifactId>maven-resources-plugin</artifactId> -->
+<!-- 		      <executions> -->
+<!-- 		          <execution> -->
+<!-- 		              <id>copy-resources</id> -->
+<!-- 		              <phase>package</phase> -->
+<!-- 		              <goals> -->
+<!-- 		                  <goal>copy-resources</goal> -->
+<!-- 		              </goals> -->
+<!-- 		              <configuration> -->
+<!-- 		                  <outputDirectory>${docker.build.directory}</outputDirectory> -->
+<!-- 		                  <resources> -->
+<!-- 		                      <resource> -->
+<!-- 		                          <directory>${docker.image.src.root}</directory> -->
+<!-- 		                          <filtering>false</filtering> -->
+<!-- 		                      </resource> -->
+<!-- 		                  </resources> -->
+<!-- 		              </configuration> -->
+<!-- 		          </execution> -->
+<!-- 		      </executions> -->
+<!-- 		  </plugin> -->
+
+<!-- 	 <plugin> -->
+<!--       <groupId>org.apache.maven.plugins</groupId> -->
+<!--       <artifactId>maven-dependency-plugin</artifactId> -->
+<!--       <executions> -->
+<!--           <execution> -->
+<!--               <id>copy</id> -->
+<!--               <phase>package</phase> -->
+<!--               <goals> -->
+<!--                   <goal>copy</goal> -->
+<!--               </goals> -->
+<!--               <configuration> -->
+<!--                   <artifactItems> -->
+<!--                       <artifactItem> -->
+<!--                           <groupId>${project.groupId}</groupId> -->
+<!--                           <artifactId>${project.artifactId}</artifactId> -->
+<!--                           <version>${project.version}</version> -->
+<!--                           <type>jar</type> -->
+<!--                           <overWrite>true</overWrite> -->
+<!--                           <outputDirectory>${docker.build.directory}</outputDirectory> -->
+<!--                           <destFileName>${project.build.finalName}.jar</destFileName> -->
+<!--                       </artifactItem> -->
+
+<!--                   </artifactItems> -->
+<!--                   <outputDirectory>${docker.build.directory}</outputDirectory> -->
+<!--                   <overWriteReleases>true</overWriteReleases> -->
+<!--                   <overWriteSnapshots>true</overWriteSnapshots> -->
+<!--               </configuration> -->
+<!--           </execution> -->
+<!--       </executions> -->
+<!--   </plugin> -->
+<!--   <plugin> -->
+<!--     <groupId>com.spotify</groupId> -->
+<!--     <artifactId>docker-maven-plugin</artifactId> -->
+<!--     <version>0.4.13</version> -->
+<!--     <executions> -->
+<!--         <execution> -->
+<!--             <id>remove-image</id> -->
+<!--             <phase>clean</phase> -->
+<!--             <goals> -->
+<!--                 <goal>removeImage</goal> -->
+<!--             </goals> -->
+<!--             <configuration> -->
+<!--                 <imageName>${docker.image.name}</imageName> -->
+<!--                 <imageTags> -->
+<!--                     <imageTag>${project.version}</imageTag> -->
+<!--                 </imageTags> -->
+<!--                 <verbose>true</verbose> -->
+<!--             </configuration> -->
+<!--         </execution> -->
+<!--     </executions> -->
+<!-- </plugin> -->
+<!-- <plugin> -->
+<!--          <groupId>com.spotify</groupId> -->
+<!--          <artifactId>dockerfile-maven-plugin</artifactId> -->
+<!--          <version>1.2.2</version> -->
+<!--          <executions> -->
+<!--              <execution> -->
+<!--                  <id>default</id> -->
+<!--                  <phase>package</phase> -->
+<!--                  <goals> -->
+<!--                      <goal>build</goal> -->
+<!--                  </goals> -->
+<!--              </execution> -->
+<!--          </executions> -->
+<!--          <configuration> -->
+<!--              <contextDirectory>${docker.build.directory}</contextDirectory> -->
+<!--              <buildArgs> -->
+<!-- 		     	<jarFile>${project.build.finalName}.jar</jarFile> -->
+<!-- 		     	<output>${docker.build.directory}</output> -->
+<!-- 		     </buildArgs> -->
+<!--              <writeTestMetadata>false</writeTestMetadata> -->
+<!--              <dockerInfoDirectory></dockerInfoDirectory> -->
+<!--              <verbose>true</verbose> -->
+<!--              <forceCreation>true</forceCreation> -->
+<!--              <imageName>${docker.image.name}</imageName> -->
+<!--              <repository>${docker.image.name}</repository> -->
+<!--              <tag>${project.version}</tag> -->
+<!--              <forceTags>true</forceTags> -->
+<!--              <pullNewerImage>false</pullNewerImage> -->
+<!--              <imageTags> -->
+<!--                  <imageTag>${project.version}</imageTag> -->
+<!--              </imageTags> -->
+<!--              <dockerDirectory>${project.build.directory}</dockerDirectory> -->
+<!--          </configuration> -->
+<!--      </plugin> -->
 	
     </plugins>
 </build>

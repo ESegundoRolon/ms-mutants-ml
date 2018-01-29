@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@RequestMapping("api/v1")
 public class MutantController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MutantController.class);
@@ -44,7 +45,7 @@ public class MutantController {
 	   *Endpoint que recibe secuencia de ADN y devuelve si es mutante o no
 	   *
 	   */
-	@RequestMapping(value = "mutant", method = RequestMethod.POST)
+	@RequestMapping(value = "/mutant", method = RequestMethod.POST)
 	public Object mutantDetector(@RequestBody @Valid DNASequenceRequest request, BindingResult result) throws BindException {
 		if(result.hasErrors())
 			return errorHandler.handleValidationError(result);
@@ -67,7 +68,7 @@ public class MutantController {
 	   *Endpoint obtener estadisticas de las secuencias de ADN guardadas
 	   *
 	   */
-	@RequestMapping(value = "stats", method = RequestMethod.GET)
+	@RequestMapping(value = "/stats", method = RequestMethod.GET)
 	public Object stats() {
 		try {
 			return new ResponseEntity<>( statsService.getStats() , HttpStatus.OK );
