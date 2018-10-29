@@ -4,7 +4,7 @@
   <groupId>org.github.erolon</groupId>
   <artifactId>ms-mutants-ml</artifactId>
   <packaging>jar</packaging>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.4-SNAPSHOT</version>
   <name>ms-mutants-ml</name>
   <description>ML-Challenge</description>
 
