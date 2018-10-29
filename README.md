@@ -7,6 +7,15 @@
 
 ## INSTALACIÓN:
 
+
+
+
+
+
+
+
+
+
 ### 1- Descargar el proyectos:
 
 
