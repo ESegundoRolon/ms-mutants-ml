@@ -7,7 +7,7 @@
 
 ## INSTALACIÓN:
 
-### 1- Descargar el proyecto:
+### 1- Descargar el proyectos:
 
 
 ```bash
