@@ -1,6 +1,6 @@
 ## REQUISITOS
 
-* Docker Windows 7 v17.05 o superior
+* Dockerssss Windows 7 v17.05 o superior
 * Apache Maven 3.5.0 o superior
 * Git-cli en cualquier version
 * Desarrollado en JDK 1.8.0_161 <Opcional>
